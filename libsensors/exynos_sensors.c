@@ -67,12 +67,12 @@ struct sensor_t exynos_sensors[] = {
 int exynos_sensors_count = sizeof(exynos_sensors) / sizeof(struct sensor_t);
 
 struct exynos_sensors_handlers *exynos_sensors_handlers[] = {
-	&lsm6ds3dlc_acceleration,
+	&lsm6ds3_acceleration,
 	&akm8975,
 	&orientation,
 	&cm36651_proximity,
 	&cm36651_light,
-	&lsm6ds3dlc_gyroscope,
+	&lsm6ds3_gyroscope,
 	&lps331ap,
 };
 
