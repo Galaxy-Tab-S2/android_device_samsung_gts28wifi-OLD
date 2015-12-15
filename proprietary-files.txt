@@ -49,7 +49,6 @@ vendor/lib/libRSDriverArm.so
 lib/omx/libOMX.Exynos.AVC.Encoder.so
 
 ### Sensors
-lib/hw/sensors.exynos5.so
 lib/libsensorlistener.so
 
 ### Widevine
