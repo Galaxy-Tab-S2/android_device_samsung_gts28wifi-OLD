@@ -50,6 +50,7 @@ lib/omx/libOMX.Exynos.AVC.Encoder.so
 
 ### Sensors
 lib/libsensorlistener.so
+lib/libyasalgo.so
 
 ### Widevine
 lib/liboemcrypto.so
