@@ -13,8 +13,8 @@
  *
  */
 
-#ifndef __LSM330DLC_ACCEL_HEADER__
-#define __LSM330DLC_ACCEL_HEADER__
+#ifndef __LSM6DS3_ACCEL_HEADER__
+#define __LSM6DS3_ACCEL_HEADER__
 
 #include <linux/types.h>
 #include <linux/ioctl.h>
@@ -163,7 +163,7 @@
 /* dev info */
 #define ACC_DEV_NAME "accelerometer"
 
-struct lsm330dlc_acc {
+struct lsm6ds3_acc {
 	__s16 x;
 	__s16 y;
 	__s16 z;
@@ -173,13 +173,13 @@ struct lsm330dlc_acc {
 #define USES_MOVEMENT_RECOGNITION
 
 /* LSM330DLC_ACCEL ioctl command label */
-#define LSM330DLC_ACCEL_IOCTL_BASE 'a'
-#define LSM330DLC_ACCEL_IOCTL_SET_DELAY   \
-	_IOW(LSM330DLC_ACCEL_IOCTL_BASE, 0, int64_t)
-#define LSM330DLC_ACCEL_IOCTL_GET_DELAY  \
-	_IOR(LSM330DLC_ACCEL_IOCTL_BASE, 1, int64_t)
-#define LSM330DLC_ACCEL_IOCTL_READ_XYZ\
-	_IOR(LSM330DLC_ACCEL_IOCTL_BASE, 8, struct lsm330dlc_acc)
-#define LSM330DLC_ACCEL_IOCTL_SET_ENABLE   \
-	_IOW(LSM330DLC_ACCEL_IOCTL_BASE, 9, int)
+#define LSM6DS3_ACCEL_IOCTL_BASE 'a'
+#define LSM6DS3_ACCEL_IOCTL_SET_DELAY   \
+	_IOW(LSM6DS3_ACCEL_IOCTL_BASE, 0, int64_t)
+#define LSM6DS3_ACCEL_IOCTL_GET_DELAY  \
+	_IOR(LSM6DS3_ACCEL_IOCTL_BASE, 1, int64_t)
+#define LSM6DS3_ACCEL_IOCTL_READ_XYZ\
+	_IOR(LSM6DS3_ACCEL_IOCTL_BASE, 8, struct lsm6ds3_acc)
+#define LSM6DS3_ACCEL_IOCTL_SET_ENABLE   \
+	_IOW(LSM6DS3_ACCEL_IOCTL_BASE, 9, int)
 #endif

@@ -41,7 +41,7 @@
  */
 
 struct sensor_t exynos_sensors[] = {
-	{ "LSM330DLC Acceleration Sensor", "STMicroelectronics", 1, SENSOR_TYPE_ACCELEROMETER,
+	{ "LSM6DS3 Acceleration Sensor", "STMicroelectronics", 1, SENSOR_TYPE_ACCELEROMETER,
 		SENSOR_TYPE_ACCELEROMETER, 19.61f, 0.0096f, 0.23f, 10000, 0, 0, SENSOR_STRING_TYPE_ACCELEROMETER, "", 0,
         SENSOR_FLAG_ON_CHANGE_MODE, {}, },
 	{ "AKM8975 Magnetic Sensor", "Asahi Kasei", 1, SENSOR_TYPE_MAGNETIC_FIELD,
@@ -56,7 +56,7 @@ struct sensor_t exynos_sensors[] = {
 	{ "CM36651 Proximity Sensor", "Capella", 1, SENSOR_TYPE_PROXIMITY,
 		SENSOR_TYPE_PROXIMITY, 8.0f, 8.0f, 1.3f, 0, 0, 0, SENSOR_STRING_TYPE_PROXIMITY, "", 0,
         SENSOR_FLAG_WAKE_UP | SENSOR_FLAG_ON_CHANGE_MODE, {}, },
-	{ "LSM330DLC Gyroscope Sensor", "STMicroelectronics", 1, SENSOR_TYPE_GYROSCOPE,
+	{ "LSM6DS3 Gyroscope Sensor", "STMicroelectronics", 1, SENSOR_TYPE_GYROSCOPE,
 		SENSOR_TYPE_GYROSCOPE, 8.73f, 0.00031f, 6.1f, 5000, 0, 0, SENSOR_STRING_TYPE_GYROSCOPE, "", 0,
         SENSOR_FLAG_ON_CHANGE_MODE, {}, },
 	{ "LPS331AP Pressure Sensor", "STMicroelectronics", 1, SENSOR_TYPE_PRESSURE,
@@ -67,12 +67,12 @@ struct sensor_t exynos_sensors[] = {
 int exynos_sensors_count = sizeof(exynos_sensors) / sizeof(struct sensor_t);
 
 struct exynos_sensors_handlers *exynos_sensors_handlers[] = {
-	&lsm330dlc_acceleration,
+	&lsm6ds3dlc_acceleration,
 	&akm8975,
 	&orientation,
 	&cm36651_proximity,
 	&cm36651_light,
-	&lsm330dlc_gyroscope,
+	&lsm6ds3dlc_gyroscope,
 	&lps331ap,
 };
 
@@ -296,7 +296,7 @@ struct sensors_module_t HAL_MODULE_INFO_SYM = {
 		.version_minor = 0,
 		.id = SENSORS_HARDWARE_MODULE_ID,
 		.name = "Exynos Sensors",
-		.author = "Paul Kocialkowski",
+		.author = "Paul Kocialkowski, Patrick Pedersen (CTXz)",
 		.methods = &exynos_sensors_module_methods,
 	},
 	.get_sensors_list = exynos_sensors_get_sensors_list,

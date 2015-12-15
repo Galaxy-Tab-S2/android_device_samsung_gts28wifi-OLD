@@ -33,8 +33,8 @@ LOCAL_SRC_FILES := \
 	akmdfs/AKFS_FileIO.c \
 	cm36651_proximity.c \
 	cm36651_light.c \
-	lsm330dlc_acceleration.c \
-	lsm330dlc_gyroscope.c \
+	lsm6ds3_acceleration.c \
+	lsm6ds3_gyroscope.c \
 	lps331ap.c \
 
 LOCAL_C_INCLUDES := \
@@ -45,7 +45,7 @@ LOCAL_C_INCLUDES := \
 LOCAL_SHARED_LIBRARIES := libutils libcutils liblog libhardware
 LOCAL_PRELINK_MODULE := false
 
-LOCAL_MODULE := sensors.$(TARGET_BOOTLOADER_BOARD_NAME)
+LOCAL_MODULE := sensors.$(TARGET_BOARD_PLATFORM)
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_MODULE_TAGS := optional
 

@@ -90,12 +90,12 @@ int sysfs_string_write(char *path, char *buffer, int length);
 int orientation_fill(struct exynos_sensors_handlers *handlers,
 	sensors_vec_t *acceleration, sensors_vec_t *magnetic);
 
-extern struct exynos_sensors_handlers lsm330dlc_acceleration;
+extern struct exynos_sensors_handlers lsm6ds3_acceleration;
 extern struct exynos_sensors_handlers akm8975;
 extern struct exynos_sensors_handlers orientation;
 extern struct exynos_sensors_handlers cm36651_proximity;
 extern struct exynos_sensors_handlers cm36651_light;
-extern struct exynos_sensors_handlers lsm330dlc_gyroscope;
+extern struct exynos_sensors_handlers lsm6ds3_gyroscope;
 extern struct exynos_sensors_handlers lps331ap;
 
 #endif

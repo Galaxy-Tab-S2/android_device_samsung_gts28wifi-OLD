@@ -32,9 +32,9 @@
 #include <utils/Log.h>
 
 #include "exynos_sensors.h"
-#include "lsm330dlc_accel.h"
+#include "lsm6ds3_accel.h"
 
-struct lsm330dlc_acceleration_data {
+struct lsm6ds3_acceleration_data {
 	struct exynos_sensors_handlers *orientation_sensor;
 
 	long int delay;
@@ -46,11 +46,11 @@ struct lsm330dlc_acceleration_data {
 	int thread_continue;
 };
 
-void *lsm330dlc_acceleration_thread(void *thread_data)
+void *lsm6ds3_acceleration_thread(void *thread_data)
 {
 	struct exynos_sensors_handlers *handlers = NULL;
-	struct lsm330dlc_acceleration_data *data = NULL;
-	struct lsm330dlc_acc values;
+	struct lsm6ds3_acceleration_data *data = NULL;
+	struct lsm6ds3_acc values;
 	struct input_event event;
 	struct timeval time;
 	long int before, after;
@@ -66,7 +66,7 @@ void *lsm330dlc_acceleration_thread(void *thread_data)
 	if (handlers->data == NULL)
 		return NULL;
 
-	data = (struct lsm330dlc_acceleration_data *) handlers->data;
+	data = (struct lsm6ds3_acceleration_data *) handlers->data;
 
 	device_fd = data->device_fd;
 	if (device_fd < 0)
@@ -86,7 +86,7 @@ void *lsm330dlc_acceleration_thread(void *thread_data)
 			before = timestamp(&time);
 
 			memset(&values, 0, sizeof(values));
-			rc = ioctl(device_fd, LSM330DLC_ACCEL_IOCTL_READ_XYZ, &values);
+			rc = ioctl(device_fd, LSM6DS3_ACCEL_IOCTL_READ_XYZ, &values);
 			if (rc < 0) {
 				ALOGE("%s: Unable to set read XYZ", __func__);
 				return NULL;
@@ -114,10 +114,10 @@ void *lsm330dlc_acceleration_thread(void *thread_data)
 	return NULL;
 }
 
-int lsm330dlc_acceleration_init(struct exynos_sensors_handlers *handlers,
+int lsm6ds3_acceleration_init(struct exynos_sensors_handlers *handlers,
 	struct exynos_sensors_device *device)
 {
-	struct lsm330dlc_acceleration_data *data = NULL;
+	struct lsm6ds3_acceleration_data *data = NULL;
 	pthread_attr_t thread_attr;
 	int device_fd = -1;
 	int uinput_fd = -1;
@@ -130,7 +130,7 @@ int lsm330dlc_acceleration_init(struct exynos_sensors_handlers *handlers,
 	if (handlers == NULL)
 		return -EINVAL;
 
-	data = (struct lsm330dlc_acceleration_data *) calloc(1, sizeof(struct lsm330dlc_acceleration_data));
+	data = (struct lsm6ds3_acceleration_data *) calloc(1, sizeof(struct lsm6ds3_acceleration_data));
 
 	for (i = 0; i < device->handlers_count; i++) {
 		if (device->handlers[i] == NULL)
@@ -166,7 +166,7 @@ int lsm330dlc_acceleration_init(struct exynos_sensors_handlers *handlers,
 	pthread_attr_init(&thread_attr);
 	pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED);
 
-	rc = pthread_create(&data->thread, &thread_attr, lsm330dlc_acceleration_thread, (void *) handlers);
+	rc = pthread_create(&data->thread, &thread_attr, lsm6ds3_acceleration_thread, (void *) handlers);
 	if (rc < 0) {
 		ALOGE("%s: Unable to create acceleration thread", __func__);
 		pthread_mutex_destroy(&data->mutex);
@@ -199,16 +199,16 @@ error:
 	return -1;
 }
 
-int lsm330dlc_acceleration_deinit(struct exynos_sensors_handlers *handlers)
+int lsm6ds3_acceleration_deinit(struct exynos_sensors_handlers *handlers)
 {
-	struct lsm330dlc_acceleration_data *data;
+	struct lsm6ds3_acceleration_data *data;
 
 	ALOGD("%s(%p)", __func__, handlers);
 
 	if (handlers == NULL || handlers->data == NULL)
 		return -EINVAL;
 
-	data = (struct lsm330dlc_acceleration_data *) handlers->data;
+	data = (struct lsm6ds3_acceleration_data *) handlers->data;
 
 	handlers->activated = 0;
 	data->thread_continue = 0;
@@ -236,9 +236,9 @@ int lsm330dlc_acceleration_deinit(struct exynos_sensors_handlers *handlers)
 	return 0;
 }
 
-int lsm330dlc_acceleration_activate(struct exynos_sensors_handlers *handlers)
+int lsm6ds3_acceleration_activate(struct exynos_sensors_handlers *handlers)
 {
-	struct lsm330dlc_acceleration_data *data;
+	struct lsm6ds3_acceleration_data *data;
 	int device_fd;
 	int enable;
 	int rc;
@@ -248,14 +248,14 @@ int lsm330dlc_acceleration_activate(struct exynos_sensors_handlers *handlers)
 	if (handlers == NULL || handlers->data == NULL)
 		return -EINVAL;
 
-	data = (struct lsm330dlc_acceleration_data *) handlers->data;
+	data = (struct lsm6ds3_acceleration_data *) handlers->data;
 
 	device_fd = data->device_fd;
 	if (device_fd < 0)
 		return -EINVAL;
 
 	enable = 1;
-	rc = ioctl(device_fd, LSM330DLC_ACCEL_IOCTL_SET_ENABLE, &enable);
+	rc = ioctl(device_fd, LSM6DS3_ACCEL_IOCTL_SET_ENABLE, &enable);
 	if (rc < 0) {
 		ALOGE("%s: Unable to set enable", __func__);
 		return -1;
@@ -267,9 +267,9 @@ int lsm330dlc_acceleration_activate(struct exynos_sensors_handlers *handlers)
 	return 0;
 }
 
-int lsm330dlc_acceleration_deactivate(struct exynos_sensors_handlers *handlers)
+int lsm6ds3_acceleration_deactivate(struct exynos_sensors_handlers *handlers)
 {
-	struct lsm330dlc_acceleration_data *data;
+	struct lsm6ds3_acceleration_data *data;
 	int device_fd;
 	int enable;
 	int rc;
@@ -279,14 +279,14 @@ int lsm330dlc_acceleration_deactivate(struct exynos_sensors_handlers *handlers)
 	if (handlers == NULL || handlers->data == NULL)
 		return -EINVAL;
 
-	data = (struct lsm330dlc_acceleration_data *) handlers->data;
+	data = (struct lsm6ds3_acceleration_data *) handlers->data;
 
 	device_fd = data->device_fd;
 	if (device_fd < 0)
 		return -EINVAL;
 
 	enable = 0;
-	rc = ioctl(device_fd, LSM330DLC_ACCEL_IOCTL_SET_ENABLE, &enable);
+	rc = ioctl(device_fd, LSM6DS3_ACCEL_IOCTL_SET_ENABLE, &enable);
 	if (rc < 0) {
 		ALOGE("%s: Unable to set enable", __func__);
 		return -1;
@@ -297,9 +297,9 @@ int lsm330dlc_acceleration_deactivate(struct exynos_sensors_handlers *handlers)
 	return 0;
 }
 
-int lsm330dlc_acceleration_set_delay(struct exynos_sensors_handlers *handlers, long int delay)
+int lsm6ds3_acceleration_set_delay(struct exynos_sensors_handlers *handlers, long int delay)
 {
-	struct lsm330dlc_acceleration_data *data;
+	struct lsm6ds3_acceleration_data *data;
 	unsigned long long d;
 	int device_fd;
 	int rc;
@@ -309,14 +309,14 @@ int lsm330dlc_acceleration_set_delay(struct exynos_sensors_handlers *handlers, l
 	if (handlers == NULL || handlers->data == NULL)
 		return -EINVAL;
 
-	data = (struct lsm330dlc_acceleration_data *) handlers->data;
+	data = (struct lsm6ds3_acceleration_data *) handlers->data;
 
 	device_fd = data->device_fd;
 	if (device_fd < 0)
 		return -EINVAL;
 
 	d = (unsigned long long) delay;
-	rc = ioctl(device_fd, LSM330DLC_ACCEL_IOCTL_SET_DELAY, &d);
+	rc = ioctl(device_fd, LSM6DS3_ACCEL_IOCTL_SET_DELAY, &d);
 	if (rc < 0) {
 		ALOGE("%s: Unable to set delay", __func__);
 		return -1;
@@ -327,15 +327,15 @@ int lsm330dlc_acceleration_set_delay(struct exynos_sensors_handlers *handlers, l
 	return 0;
 }
 
-float lsm330dlc_acceleration_convert(int value)
+float lsm6ds3_acceleration_convert(int value)
 {
 	return (float) (value * GRAVITY_EARTH) / 1024.0f;
 }
 
-int lsm330dlc_acceleration_get_data(struct exynos_sensors_handlers *handlers,
+int lsm6ds3_acceleration_get_data(struct exynos_sensors_handlers *handlers,
 	struct sensors_event_t *event)
 {
-	struct lsm330dlc_acceleration_data *data;
+	struct lsm6ds3_acceleration_data *data;
 	struct input_event input_event;
 	int input_fd;
 	int rc;
@@ -345,7 +345,7 @@ int lsm330dlc_acceleration_get_data(struct exynos_sensors_handlers *handlers,
 	if (handlers == NULL || handlers->data == NULL || event == NULL)
 		return -EINVAL;
 
-	data = (struct lsm330dlc_acceleration_data *) handlers->data;
+	data = (struct lsm6ds3_acceleration_data *) handlers->data;
 
 	input_fd = handlers->poll_fd;
 	if (input_fd < 0)
@@ -365,13 +365,13 @@ int lsm330dlc_acceleration_get_data(struct exynos_sensors_handlers *handlers,
 		if (input_event.type == EV_REL) {
 			switch (input_event.code) {
 				case REL_X:
-					event->acceleration.x = lsm330dlc_acceleration_convert(input_event.value);
+					event->acceleration.x = lsm6ds3_acceleration_convert(input_event.value);
 					break;
 				case REL_Y:
-					event->acceleration.y = lsm330dlc_acceleration_convert(input_event.value);
+					event->acceleration.y = lsm6ds3_acceleration_convert(input_event.value);
 					break;
 				case REL_Z:
-					event->acceleration.z = lsm330dlc_acceleration_convert(input_event.value);
+					event->acceleration.z = lsm6ds3_acceleration_convert(input_event.value);
 					break;
 				default:
 					continue;
@@ -388,15 +388,15 @@ int lsm330dlc_acceleration_get_data(struct exynos_sensors_handlers *handlers,
 	return 0;
 }
 
-struct exynos_sensors_handlers lsm330dlc_acceleration = {
-	.name = "LSM330DLC Acceleration",
+struct exynos_sensors_handlers lsm6ds3_acceleration = {
+	.name = "LSM6DS3 Acceleration",
 	.handle = SENSOR_TYPE_ACCELEROMETER,
-	.init = lsm330dlc_acceleration_init,
-	.deinit = lsm330dlc_acceleration_deinit,
-	.activate = lsm330dlc_acceleration_activate,
-	.deactivate = lsm330dlc_acceleration_deactivate,
-	.set_delay = lsm330dlc_acceleration_set_delay,
-	.get_data = lsm330dlc_acceleration_get_data,
+	.init = lsm6ds3_acceleration_init,
+	.deinit = lsm6ds3_acceleration_deinit,
+	.activate = lsm6ds3_acceleration_activate,
+	.deactivate = lsm6ds3_acceleration_deactivate,
+	.set_delay = lsm6ds3_acceleration_set_delay,
+	.get_data = lsm6ds3_acceleration_get_data,
 	.activated = 0,
 	.needed = 0,
 	.poll_fd = -1,

@@ -33,15 +33,15 @@
 
 #include "exynos_sensors.h"
 
-struct lsm330dlc_gyroscope_data {
+struct lsm6ds3_gyroscope_data {
 	char path_enable[PATH_MAX];
 	char path_delay[PATH_MAX];
 };
 
-int lsm330dlc_gyroscope_init(struct exynos_sensors_handlers *handlers,
+int lsm6ds3_gyroscope_init(struct exynos_sensors_handlers *handlers,
 	struct exynos_sensors_device *device)
 {
-	struct lsm330dlc_gyroscope_data *data = NULL;
+	struct lsm6ds3_gyroscope_data *data = NULL;
 	char path[PATH_MAX] = { 0 };
 	int input_fd = -1;
 	int rc;
@@ -51,7 +51,7 @@ int lsm330dlc_gyroscope_init(struct exynos_sensors_handlers *handlers,
 	if (handlers == NULL)
 		return -EINVAL;
 
-	data = (struct lsm330dlc_gyroscope_data *) calloc(1, sizeof(struct lsm330dlc_gyroscope_data));
+	data = (struct lsm6ds3_gyroscope_data *) calloc(1, sizeof(struct lsm6ds3_gyroscope_data));
 
 	input_fd = input_open("gyro_sensor");
 	if (input_fd < 0) {
@@ -86,7 +86,7 @@ error:
 	return -1;
 }
 
-int lsm330dlc_gyroscope_deinit(struct exynos_sensors_handlers *handlers)
+int lsm6ds3_gyroscope_deinit(struct exynos_sensors_handlers *handlers)
 {
 	ALOGD("%s(%p)", __func__, handlers);
 
@@ -105,9 +105,9 @@ int lsm330dlc_gyroscope_deinit(struct exynos_sensors_handlers *handlers)
 }
 
 
-int lsm330dlc_gyroscope_activate(struct exynos_sensors_handlers *handlers)
+int lsm6ds3_gyroscope_activate(struct exynos_sensors_handlers *handlers)
 {
-	struct lsm330dlc_gyroscope_data *data;
+	struct lsm6ds3_gyroscope_data *data;
 	int rc;
 
 	ALOGD("%s(%p)", __func__, handlers);
@@ -115,7 +115,7 @@ int lsm330dlc_gyroscope_activate(struct exynos_sensors_handlers *handlers)
 	if (handlers == NULL || handlers->data == NULL)
 		return -EINVAL;
 
-	data = (struct lsm330dlc_gyroscope_data *) handlers->data;
+	data = (struct lsm6ds3_gyroscope_data *) handlers->data;
 
 	rc = sysfs_value_write(data->path_enable, 1);
 	if (rc < 0) {
@@ -128,9 +128,9 @@ int lsm330dlc_gyroscope_activate(struct exynos_sensors_handlers *handlers)
 	return 0;
 }
 
-int lsm330dlc_gyroscope_deactivate(struct exynos_sensors_handlers *handlers)
+int lsm6ds3_gyroscope_deactivate(struct exynos_sensors_handlers *handlers)
 {
-	struct lsm330dlc_gyroscope_data *data;
+	struct lsm6ds3_gyroscope_data *data;
 	int rc;
 
 	ALOGD("%s(%p)", __func__, handlers);
@@ -138,7 +138,7 @@ int lsm330dlc_gyroscope_deactivate(struct exynos_sensors_handlers *handlers)
 	if (handlers == NULL || handlers->data == NULL)
 		return -EINVAL;
 
-	data = (struct lsm330dlc_gyroscope_data *) handlers->data;
+	data = (struct lsm6ds3_gyroscope_data *) handlers->data;
 
 	rc = sysfs_value_write(data->path_enable, 0);
 	if (rc < 0) {
@@ -151,9 +151,9 @@ int lsm330dlc_gyroscope_deactivate(struct exynos_sensors_handlers *handlers)
 	return 0;
 }
 
-int lsm330dlc_gyroscope_set_delay(struct exynos_sensors_handlers *handlers, long int delay)
+int lsm6ds3_gyroscope_set_delay(struct exynos_sensors_handlers *handlers, long int delay)
 {
-	struct lsm330dlc_gyroscope_data *data;
+	struct lsm6ds3_gyroscope_data *data;
 	int rc;
 
 	ALOGD("%s(%p, %ld)", __func__, handlers, delay);
@@ -161,7 +161,7 @@ int lsm330dlc_gyroscope_set_delay(struct exynos_sensors_handlers *handlers, long
 	if (handlers == NULL || handlers->data == NULL)
 		return -EINVAL;
 
-	data = (struct lsm330dlc_gyroscope_data *) handlers->data;
+	data = (struct lsm6ds3_gyroscope_data *) handlers->data;
 
 	rc = sysfs_value_write(data->path_delay, (int) delay);
 	if (rc < 0) {
@@ -172,12 +172,12 @@ int lsm330dlc_gyroscope_set_delay(struct exynos_sensors_handlers *handlers, long
 	return 0;
 }
 
-float lsm330dlc_gyroscope_convert(int value)
+float lsm6ds3_gyroscope_convert(int value)
 {
 	return ((float) value * 0.3054326f) / 1000.0f;
 }
 
-int lsm330dlc_gyroscope_get_data(struct exynos_sensors_handlers *handlers,
+int lsm6ds3_gyroscope_get_data(struct exynos_sensors_handlers *handlers,
 	struct sensors_event_t *event)
 {
 	struct input_event input_event;
@@ -205,13 +205,13 @@ int lsm330dlc_gyroscope_get_data(struct exynos_sensors_handlers *handlers,
 		if (input_event.type == EV_REL) {
 			switch (input_event.code) {
 				case REL_RX:
-					event->magnetic.x = lsm330dlc_gyroscope_convert(input_event.value);
+					event->magnetic.x = lsm6ds3_gyroscope_convert(input_event.value);
 					break;
 				case REL_RY:
-					event->magnetic.y = lsm330dlc_gyroscope_convert(input_event.value);
+					event->magnetic.y = lsm6ds3_gyroscope_convert(input_event.value);
 					break;
 				case REL_RZ:
-					event->magnetic.z = lsm330dlc_gyroscope_convert(input_event.value);
+					event->magnetic.z = lsm6ds3_gyroscope_convert(input_event.value);
 					break;
 				default:
 					continue;
@@ -225,15 +225,15 @@ int lsm330dlc_gyroscope_get_data(struct exynos_sensors_handlers *handlers,
 	return 0;
 }
 
-struct exynos_sensors_handlers lsm330dlc_gyroscope = {
-	.name = "LSM330DLC Gyroscope",
+struct exynos_sensors_handlers lsm6ds3_gyroscope = {
+	.name = "LSM6DS3 Gyroscope",
 	.handle = SENSOR_TYPE_GYROSCOPE,
-	.init = lsm330dlc_gyroscope_init,
-	.deinit = lsm330dlc_gyroscope_deinit,
-	.activate = lsm330dlc_gyroscope_activate,
-	.deactivate = lsm330dlc_gyroscope_deactivate,
-	.set_delay = lsm330dlc_gyroscope_set_delay,
-	.get_data = lsm330dlc_gyroscope_get_data,
+	.init = lsm6ds3_gyroscope_init,
+	.deinit = lsm6ds3_gyroscope_deinit,
+	.activate = lsm6ds3_gyroscope_activate,
+	.deactivate = lsm6ds3_gyroscope_deactivate,
+	.set_delay = lsm6ds3_gyroscope_set_delay,
+	.get_data = lsm6ds3_gyroscope_get_data,
 	.activated = 0,
 	.needed = 0,
 	.poll_fd = -1,
