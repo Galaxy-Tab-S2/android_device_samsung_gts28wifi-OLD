@@ -130,6 +130,14 @@ LOCAL_MODULE_PATH	:= $(TARGET_ROOT_OUT)
 include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE		:= ueventd.samsungexynos5433.rc
+LOCAL_MODULE_TAGS	:= optional eng
+LOCAL_MODULE_CLASS	:= BOOT
+LOCAL_SRC_FILES		:= etc/ueventd.samsungexynos5433.rc
+LOCAL_MODULE_PATH	:= $(TARGET_ROOT_OUT)
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
 LOCAL_MODULE		:= ueventd.goldfish.rc
 LOCAL_MODULE_TAGS	:= optional eng
 LOCAL_MODULE_CLASS	:= BOOT
