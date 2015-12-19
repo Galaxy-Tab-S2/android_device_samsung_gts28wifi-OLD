@@ -42,6 +42,12 @@ on boot
 
 	write /proc/sys/net/ipv4/tcp_adv_win_scale  2
 
+# Run deferred initcalls of builtin kernel modules (bcmdhd)
+service sec-sh /system/bin/sh /system/etc/init.sec.boot.sh
+    class main
+    user root
+    oneshot
+
 service p2p_supplicant /system/bin/wpa_supplicant \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
     -I/system/etc/wifi/p2p_supplicant_overlay.conf  \
