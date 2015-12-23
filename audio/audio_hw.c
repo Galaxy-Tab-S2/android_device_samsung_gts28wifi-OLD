@@ -177,7 +177,7 @@ struct audio_device {
     bool two_mic_disabled;
 
     /* RIL */
-    struct ril_handle ril;
+    //struct ril_handle ril;
 
     struct stream_out *outputs[OUTPUT_TOTAL];
     pthread_mutex_t lock_outputs; /* see note below on mutex acquisition order */
@@ -466,10 +466,10 @@ static void select_devices(struct audio_device *adev)
 
     if (adev->two_mic_control) {
         ALOGV("%s: enabling two mic control", __func__);
-        ril_set_two_mic_control(&adev->ril, AUDIENCE, TWO_MIC_SOLUTION_ON);
+        //ril_set_two_mic_control(&adev->ril, AUDIENCE, TWO_MIC_SOLUTION_ON);
     } else {
         ALOGV("%s: disabling two mic control", __func__);
-        ril_set_two_mic_control(&adev->ril, AUDIENCE, TWO_MIC_SOLUTION_OFF);
+        //ril_set_two_mic_control(&adev->ril, AUDIENCE, TWO_MIC_SOLUTION_OFF);
     }
 
     adev_set_call_audio_path(adev);
@@ -671,9 +671,9 @@ static void adev_set_call_audio_path(struct audio_device *adev)
             break;
     }
 
-    ALOGV("%s: ril_set_call_audio_path(%d)", __func__, device_type);
+    //ALOGV("%s: ril_set_call_audio_path(%d)", __func__, device_type);
 
-    ril_set_call_audio_path(&adev->ril, device_type);
+    //ril_set_call_audio_path(&adev->ril, device_type);
 }
 
 static void force_non_hdmi_out_standby(struct audio_device *adev)
@@ -1697,7 +1697,7 @@ static int adev_set_voice_volume(struct audio_hw_device *dev, float volume)
                 sound_type = SOUND_TYPE_VOICE;
         }
 
-        ril_set_call_volume(&adev->ril, sound_type, volume);
+        //ril_set_call_volume(&adev->ril, sound_type, volume);
     }
 
     return 0;
@@ -1728,7 +1728,7 @@ static int adev_set_mode(struct audio_hw_device *dev, audio_mode_t mode)
             adev->input_source = AUDIO_SOURCE_VOICE_CALL;
             select_devices(adev);
             start_voice_call(adev);
-            ril_set_call_clock_sync(&adev->ril, SOUND_CLOCK_START);
+            //ril_set_call_clock_sync(&adev->ril, SOUND_CLOCK_START);
             adev_set_voice_volume(&adev->hw_device, adev->voice_volume);
             adev->in_call = true;
         }
@@ -1737,7 +1737,7 @@ static int adev_set_mode(struct audio_hw_device *dev, audio_mode_t mode)
         if (adev->in_call) {
             adev->in_call = false;
             stop_voice_call(adev);
-            ril_set_call_clock_sync(&adev->ril, SOUND_CLOCK_STOP);
+            //ril_set_call_clock_sync(&adev->ril, SOUND_CLOCK_STOP);
             adev->input_source = AUDIO_SOURCE_DEFAULT;
             select_devices(adev);
         }
@@ -1755,7 +1755,7 @@ static int adev_set_mic_mute(struct audio_hw_device *dev, bool state)
     ALOGV("%s: set mic mute: %d\n", __func__, state);
 
     if (adev->in_call) {
-        ril_set_mute(&adev->ril, mute_condition);
+        //ril_set_mute(&adev->ril, mute_condition);
     }
 
     adev->mic_mute = state;
@@ -1898,7 +1898,7 @@ static int adev_close(hw_device_t *device)
     audio_route_free(adev->ar);
 
     /* RIL */
-    ril_close(&adev->ril);
+    //ril_close(&adev->ril);
 
     if (adev->hdmi_drv_fd >= 0)
         close(adev->hdmi_drv_fd);
@@ -1951,13 +1951,13 @@ static int adev_open(const hw_module_t* module, const char* name,
     adev->voice_volume = 1.0f;
 
     /* RIL */
-    ril_open(&adev->ril);
+    //ril_open(&adev->ril);
 
     /* register callback for wideband AMR setting */
     if (property_get_bool("audio_hal.force_wideband", false))
         adev->wb_amr = true;
     else
-        ril_register_set_wb_amr_callback(adev_set_wb_amr_callback, (void *)adev);
+        //ril_register_set_wb_amr_callback(adev_set_wb_amr_callback, (void *)adev);
 
     if (property_get_bool("audio_hal.disable_two_mic", false))
         adev->two_mic_disabled = true;
