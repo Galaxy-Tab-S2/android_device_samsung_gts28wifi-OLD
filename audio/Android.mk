@@ -28,11 +28,12 @@ LOCAL_C_INCLUDES += \
 	$(call include-path-for, audio-effects) \
 	$(call include-path-for, audio-utils) \
 	$(call include-path-for, audio-route) \
-        $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
+        $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include \
 
 LOCAL_ADDITIONAL_DEPENDENCIES += \
 	$(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
 
-LOCAL_SHARED_LIBRARIES := liblog libcutils libtinyalsa libaudioutils libdl
+LOCAL_SHARED_LIBRARIES := liblog libcutils libtinyalsa libaudioutils libdl \
+	libaudioroute
 
 include $(BUILD_SHARED_LIBRARY)
