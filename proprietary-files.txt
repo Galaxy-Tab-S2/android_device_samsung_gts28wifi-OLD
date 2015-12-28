@@ -44,6 +44,8 @@ lib/hw/gps.default.so:lib/hw/gps.default.so
 vendor/lib/libmalicore.bc
 vendor/lib/egl/libGLES_mali.so
 vendor/lib/libRSDriverArm.so
+lib/libRSDriver.so
+lib/libRSCpuRef.so
 
 ### OMX
 lib/libExynosOMX_Core.so
